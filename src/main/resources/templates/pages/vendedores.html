@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Vendedores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/cliente}">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/vendedor}">Vendedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/contratos}">Contratos</a>
+                </li>
+            </ul>
+            <div class="dropdown ms-auto">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" th:text="${session.user != null} ? ${session.user.nome} : 'Login'">>
+                    Login
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Vendedores</h2>
+
+    <div class="container mt-3" th:if="${msg != null}">
+        <div class="alert alert-danger alert-dismissible fade show">
+            <span th:text="${msg}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div class="container mt-3" th:if="${msgSucesso != null}">
+        <div class="alert alert-success alert-dismissible fade show">
+            <span th:text="${msgSucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div>
+
+        <div class="card mt-5" th:if="${op == 'editar' and vendedor != null}">
+            <div class="card-header bg-primary text-white">
+                Editar Vendedor
+            </div>
+            <div class="card-body">
+                <form th:action="@{/vendedor}" method="post">
+                    <input type="hidden" name="op" value="editar"/>
+                    <input type="hidden" name="id" th:value="${vendedor.id}"/>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" class="form-control" th:value="${vendedor.nome}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" name="telefone" class="form-control" th:value="${vendedor.telefone}" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                    <a th:href="@{/vendedor}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive" th:if="${vendedores != null and op != 'editar'}">
+            <table class="table table-bordered table-hover bg-white">
+                <thead class="table-primary">
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Salário base</th>
+                    <th>Comissão</th>
+                    <th>Salário Total</th>
+                    <th>Total Vendido</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="v : ${vendedores}">
+                    <td th:text="${v.nome}"></td>
+                    <td th:text="${v.telefone}"></td>
+                    <td th:text="${#numbers.formatDecimal(v.salario, 1, 'COMMA', 2, 'POINT')}"></td>
+                    <td th:text="${v.comissao * 100} + '%' "></td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(v.salarioComComissao, 1, 'COMMA', 2, 'POINT')}"></td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(v.totalVendido != null ? v.totalVendido : 0, 1, 'COMMA', 2, 'POINT')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-info" role="alert" th:if="${vendedores == null}">
+            Nenhum vendedor cadastrado ainda.
+        </div>
+
+        <a th:href="@{/dashboard}" class="btn btn-secondary mt-3">Voltar para o Dashboard</a>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</body>
+</html>

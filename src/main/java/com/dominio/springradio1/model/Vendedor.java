@@ -23,6 +23,20 @@ public class Vendedor extends User{
     }
 
 
+    @Override
+    public String toString() {
+        return "Vendedor {" +
+                "id_vendedor=" + id_vendedor +
+                ", nome='" + getNome() + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", salarioBase=" + getSalario() +
+                ", salarioComComissao=" + salarioComComissao +
+                ", comissao=" + comissao +
+                ", totalVendido=" + totalVendido +
+                ", idUser=" + idUser +
+                '}';
+    }
+
 
     public Vendedor(String nome, String telefone, int idUser) {
         super();

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes do Programa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/dashboard}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/cliente}">Clientes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/vendedor}">Vendedores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/contratos}">Contratos</a>
+        </li>
+      </ul>
+      <div class="dropdown ms-auto">
+        <button class="btn btn-secondary dropdown-toggle" type="button"
+                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                th:text="${session.user != null} ? ${session.user.nome} : 'Login'">
+          Login
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" href="#">Perfil</a></li>
+          <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h2 class="mb-4" th:text="'Blocos comerciais do programa: ' + ${programa.nome}">Programa</h2>
+  <div class="mb-3">
+    <strong>Horário:</strong> <span th:text="${programa.horarioExibicao}">08:00</span> |
+    <strong>Duração:</strong> <span th:text="${programa.duracaoTotalDoPrograma + ' min'}">60 min</span>
+  </div>
+
+  <div th:if="${programa.blocos == null or programa.blocos.isEmpty()}">
+    <div class="alert alert-info">Nenhum bloco comercial cadastrado para este programa.</div>
+  </div>
+
+  <div th:each="bloco : ${programa.blocos}">
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <strong th:text="'Bloco de ' + ${bloco.duracaoDoBlcoComercial} + ' min'">Bloco</strong>
+      </div>
+      <div class="card-body bg-white">
+        <h5 class="mb-3">Inserções Comerciais</h5>
+        <div th:if="${bloco.insercoesComerciais == null}">
+          <div class="alert alert-warning">Nenhuma inserção comercial neste bloco.</div>
+        </div>
+        <div th:if="${bloco.insercoesComerciais != null}">
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+              <thead class="table-light">
+              <tr>
+                <th>Contrato</th>
+                <th>Cliente</th>
+                <th>Duração</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="insercao : ${bloco.insercoesComerciais}">
+                <td th:text="${insercao.contrato.descricao}">Contrato X</td>
+                <td th:text="${insercao.contrato.cliente.nomeCliente}">Empresa A</td>
+                <td th:text="${insercao.duracaoEmSegundos + 's'}">30s</td>
+                <td th:text="${#dates.format(insercao.contrato.dataInicial,'dd/MM/yyyy')}">01/01/2025</td>
+                <td th:text="${#dates.format(insercao.contrato.dataFinal,'dd/MM/yyyy')}">01/01/2025</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a th:href="@{/programa}" class="btn btn-secondary mt-3">Voltar para Programas</a>
+  <a th:href="@{/blocoComercial/add/{id}(id=${programa.id})}" class="btn btn-primary mt-3">Adicionar bloco</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
+</body>
+</html>

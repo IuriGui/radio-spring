@@ -8,6 +8,7 @@ import com.dominio.springradio1.model.Contrato;
 import com.dominio.springradio1.model.Vendedor;
 
 import java.math.BigDecimal;
+import java.time.Month;
 import java.util.List;
 
 public class ContratoService {
@@ -32,6 +33,13 @@ public class ContratoService {
     public BigDecimal somaDosContratos(){
         return vd.somaDosContratos();
     }
+
+    public BigDecimal somaDosContratos(Month mes){
+        return vd.somaDosContratos(mes);
+    }
+
+
+
 
     public int countContratos(){
         return vd.countContratos();

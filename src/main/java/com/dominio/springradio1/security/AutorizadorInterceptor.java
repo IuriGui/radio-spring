@@ -16,17 +16,15 @@ public class AutorizadorInterceptor implements HandlerInterceptor {
         System.out.println("Url do interceptador "+url);
 
 
-        if (url.equals("/") || url.equals("/login")) {
+        if (url.equals("/") || url.equals("/login") || url.equals("/signup") || url.equals("/signup/cadastroUsuario") || url.equals("/signup/linkarUserVendedor")) {
             return true;
         }
 
         if (request.getSession().getAttribute("user") == null) {
-            //System.out.println("usuario não está logado");
             response.sendRedirect("/login");
             return false;
         }
 
-        System.out.println("Passamos a verificacao");
 
         return true;
     }

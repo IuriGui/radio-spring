@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,32 @@ public class ContratoDao {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public BigDecimal somaDosContratos(Month mes) {
+        BigDecimal soma = BigDecimal.ZERO;
+        String sql = "SELECT SUM(valor) FROM contrato " +
+                "WHERE ativo = true " +
+                "AND EXTRACT(MONTH FROM data_inicial) = ?";
+
+        try (Connection conn = ConectarBancoDeDados.conectarPostgres();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, mes.getValue());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                BigDecimal valor = rs.getBigDecimal(1);
+                if (valor != null) {
+                    soma = soma.add(valor);
+                }
+            }
+
+            return soma;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int countContratos() {

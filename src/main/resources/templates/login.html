@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container mt-5">
+
   <h2>Login</h2>
 
   <form action="" th:action="@{/login}"  method="post" th:object="${user}">
@@ -21,9 +22,12 @@
       <input type="password"  th:field="*{senha}"  class="form-control" id="senha" name="senha" required/>
     </div>
 
-    <button type="submit" class="btn btn-primary">Entrar</button>
-  </form>
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary" autofocus>Entrar</button>
+      <a href="#" th:href="@{/signup}" class="btn btn-secondary">Criar Conta</a>
+    </div>
 
+  </form>
 
   <div th:if="${msg}" class="alert alert-danger mt-3" th:text="${msg}"></div>
 </div>

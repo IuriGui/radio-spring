@@ -24,6 +24,8 @@ public class CadastroUserService {
 
     public boolean ativarUsuario(int id)
     {
+        System.out.println("Ativando usuario...");
+        System.out.println("id do usuario: " + id);
         return u.ativarUsuario(id);
     }
 

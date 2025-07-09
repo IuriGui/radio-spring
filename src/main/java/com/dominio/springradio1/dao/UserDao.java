@@ -231,6 +231,7 @@ public class UserDao {
         String sql = "UPDATE usuario SET ativo = true WHERE id = ?";
         try(Connection conn = ConectarBancoDeDados.conectarPostgres()){
             PreparedStatement ps = conn.prepareStatement(sql);
+            System.out.println("id do usuario: " + id);
             ps.setInt(1, id);
 
             return ps.executeUpdate() > 0;
